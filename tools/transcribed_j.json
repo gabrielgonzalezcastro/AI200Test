@@ -1,0 +1,23 @@
+{
+ "106": {"type": "hotspot", "title": "Azure Service Bus configuration and implementation", "labelHeader": "Requirement", "valueHeader": "Configuration",
+        "rows": [{"label": "Messages must be processed in the exact order they were received.", "options": ["Enable sessions.", "Enable batching.", "Enable partitioning."], "answer": "Enable sessions."},
+                 {"label": "The audit service must receive a copy of every order message.", "options": ["Use a dead-letter queue.", "Use a session-enabled queue.", "Use a topic with two subscriptions."], "answer": "Use a topic with two subscriptions."}]},
+ "111": {"type": "hotspot", "title": "Topic filters and actions", "labelHeader": "Statement", "valueHeader": "Answer", "showImages": ["q111-ex1.png"],
+        "rows": [{"label": "If there is a single message sent to the topic with content_type of \"application/json\", Region set to \"US\", and Priority set to 'high', three messages will be delivered to the subscription.", "options": ["Yes", "No"], "answer": "No"},
+                 {"label": "The values of Region and Priority are derived from the message body.", "options": ["Yes", "No"], "answer": "No"},
+                 {"label": "Replacing line 26 with the following line of code would improve performance: filter=CorrelationRuleFilter(properties={\"Priority\": \"high\"})", "options": ["Yes", "No"], "answer": "Yes"}]},
+ "112": {"type": "hotspot", "title": "Answer Area", "mono": true,
+        "segments": ["{\n  \"bindings\": [\n    {\n      \"type\": \"", {"options": ["user", "system", "message", "connected", "webPubSubTrigger", "webPubSubConnection"], "answer": "webPubSubTrigger"},
+                     "\",\n      \"direction\": \"in\",\n      \"name\": \"data\",\n      \"eventName\": \"message\",\n      \"eventType\": \"", {"options": ["user", "system", "message", "connected", "webPubSubTrigger", "webPubSubConnection"], "answer": "user"}, "\"\n    }\n  ]\n}"]},
+ "113": {"type": "ordering", "title": "Service Bus setup",
+        "items": ["Create a single Service Bus topic.", "Create a Service Bus topic for each restaurant for which a driver can receive messages.", "Create a Service Bus subscription for each restaurant for which a driver can receive orders.", "Create a single Service Bus subscription.", "Create a Service Bus Namespace for each restaurant for which a driver can receive messages.", "Create a single Service Bus Namespace."],
+        "answer": ["Create a single Service Bus Namespace.", "Create a Service Bus topic for each restaurant for which a driver can receive messages.", "Create a Service Bus subscription for each restaurant for which a driver can receive orders."]},
+ "115": {"type": "ordering", "title": "Service Bus processor provisioning and initialization sequence",
+        "items": ["Register message and error handlers.", "Start the message processor.", "Create the Service Bus client.", "Create the Service Bus processor for the queue.", "Dead-letter failed messages."],
+        "answer": ["Create the Service Bus client.", "Create the Service Bus processor for the queue.", "Register message and error handlers.", "Start the message processor."]},
+ "117": {"type": "match", "title": "AKS troubleshooting", "labelHeader": "Troubleshooting scenario", "valueHeader": "Action",
+        "items": ["Inspect container logs.", "Inspect Pod descriptions.", "Inspect Kubernetes events.", "Inspect Kubernetes service endpoints."],
+        "rows": [{"label": "Service fails to communicate with another service.", "answer": "Inspect Kubernetes service endpoints."},
+                 {"label": "Pod restarts repeatedly.", "answer": "Inspect container logs."},
+                 {"label": "Readiness probe failures are observed.", "answer": "Inspect Pod descriptions."}]}
+}

@@ -1,0 +1,21 @@
+# Source PDFs (large, third-party content; not needed to run the site)
+Questions/
+
+# Regenerable / scratch files from the data pipeline
+tools/raw.json
+tools/comp/
+tools/review.txt
+tools/probe.py
+__pycache__/
+*.pyc
+
+# Local tooling and editor files
+.claude/
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Unencrypted question data: keep local only. The site ships data/questions.enc.json instead.
+site/data/questions.json
+site/data/questions.local.js

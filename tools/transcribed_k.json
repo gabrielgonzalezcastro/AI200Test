@@ -1,0 +1,21 @@
+{
+ "118": {"type": "ordering", "title": "Tracing configuration",
+        "items": ["Redeploy the instrumented services.", "Configure a trace exporter in the OpenTelemetry SDK.", "Call TelemetryClient.TrackEvent() within service methods.", "Implement a view in the OpenTelemetry SDK.", "Instrument the application code by using the OpenTelemetry SDK."],
+        "answer": ["Instrument the application code by using the OpenTelemetry SDK.", "Configure a trace exporter in the OpenTelemetry SDK.", "Redeploy the instrumented services."]},
+ "119": {"type": "match", "title": "Backend API scaling configuration", "labelHeader": "Element", "valueHeader": "Setting",
+        "items": ["0", "1", "queueLength", "messageCount", "Azure Service Bus", "Azure Container Apps"],
+        "rows": [{"label": "Scaler", "answer": "Azure Service Bus"}, {"label": "Trigger metadata", "answer": "messageCount"}, {"label": "min-replicas", "answer": "0"}]},
+ "131": {"type": "hotspot", "title": "Answer Area", "labelHeader": "Requirement", "valueHeader": "Feature",
+        "rows": [{"label": "Single URL for test users", "options": ["Revision label", "Revision mode", "Container image", "Container registry"], "answer": "Revision label"},
+                 {"label": "Current microservice activation", "options": ["Revision label", "Revision mode", "Container image", "Container registry"], "answer": "Revision mode"}]},
+ "132": {"type": "hotspot", "title": "Configure secure container image pull", "labelHeader": "Requirement", "valueHeader": "Configuration",
+        "rows": [{"label": "Authenticate App Service to ACR.", "options": ["Assign the Container Registry Repository Reader role to a managed identity.", "Configure a webhook on ACR.", "Enable the admin user."], "answer": "Assign the Container Registry Repository Reader role to a managed identity."},
+                 {"label": "Avoid storing static credentials.", "options": ["Embed credentials in Dockerfile.", "Store the registry password in application settings.", "Use managed identity with role assignment."], "answer": "Use managed identity with role assignment."}]},
+ "133": {"type": "hotspot", "title": "Container configuration settings", "labelHeader": "Requirement", "valueHeader": "Configuration",
+        "rows": [{"label": "MODEL_VERSION", "options": ["App setting with plain text value", "Connection string", "Dockerfile ENV instruction"], "answer": "App setting with plain text value"},
+                 {"label": "Database password", "options": ["App setting with plain text value", "Connection string with embedded password", "Key Vault reference syntax"], "answer": "Key Vault reference syntax"}]},
+ "134": {"type": "hotspot", "title": "Azure CLI log commands", "mono": true,
+        "segments": ["az webapp log ", {"options": ["config", "download", "show", "tail"], "answer": "config"}, " --name ContosoWeb --resource-group ContosoDevRG \\\n  ",
+                     {"options": ["--web-server-logging", "--docker-container-logging", "--application-logging"], "answer": "--docker-container-logging"},
+                     " filesystem\n\naz ", {"options": ["webapp", "acr", "aks"], "answer": "webapp"}, " log ", {"options": ["config", "download", "show", "tail"], "answer": "tail"}, " --name ContosoWeb --resource-group ContosoDevRG"]}
+}
