@@ -128,6 +128,7 @@ window.startApp = (DATA) => {
       onChange: a => { if (S.mode === "practice") { store.answers[id] = a; Store.save(); } else S.answers[id] = a; }
     });
     const banner = h("div", { class: "banner", hidden: true });
+    const explain = h("div", { class: "explain-wrap" });
     const btnCheck = h("button", { class: "primary", onclick: () => doCheck() }, "Show answer");
     const caseBox = q.case ? h("details", { class: "casebox" }, h("summary", {}, CASES[q.case].title + " (tap to read)"), CASES[q.case].paragraphs.map(p => p.startsWith("•") ? h("li", {}, p.replace(/^•\s*/, "")) : h("p", {}, p))) : null;
     const imgs = q.interactive ? (q.interactive.showImages || []) : q.images;
@@ -145,7 +146,7 @@ window.startApp = (DATA) => {
       q.interactive && q.interactive.sourceNote ? null : null,
       view.el,
       nonInteractive ? h("div", { class: "notice" }, "No answer key is available for this question in the source PDF yet, so it can't be checked.") : null,
-      banner,
+      banner, explain,
       h("div", { class: "btnrow nav" },
         h("button", { onclick: () => go(-1), disabled: S.idx === 0 }, "← Previous"),
         S.mode === "practice" ? (nonInteractive ? null : btnCheck) : (reviewing ? null : h("button", { class: "primary", onclick: () => { if (confirm("Finish the exam and see your score?")) finishExam(); } }, "Finish exam")),
@@ -156,6 +157,7 @@ window.startApp = (DATA) => {
     function doCheck() { if (S.mode !== "practice") return; const g = view.grade(); store.results[id] = g.correct === true; Store.save(); showResult(false); }
     function showResult() {
       const g = view.grade(); view.reveal(); view.lock(); btnCheck.hidden = true;
+      explain.replaceChildren(...[buildExplanation(q, view)].filter(Boolean));
       const r = $("retry"); if (r) r.hidden = false;
       if (g.correct === null) return;
       banner.hidden = false; banner.className = "banner " + (g.correct ? "ok" : "bad");
@@ -163,6 +165,27 @@ window.startApp = (DATA) => {
       banner.textContent = (g.correct ? "✓ Correct" : "✗ Incorrect") + partial;
     }
     function retry() { delete store.results[id]; delete store.answers[id]; Store.save(); quiz(); }
+  }
+  // "Explanation" block: Correct Answer / Incorrect Answers (MCQ: keyed by option letter; other types: lists)
+  function buildExplanation(q, view) {
+    const ex = q.explanation; if (!ex || !ex.correct) return null;
+    const L = k => (view.letterOf && view.letterOf[k]) || k;
+    const optText = k => ((q.options.find(o => o.key === k)) || {}).text || "";
+    const byLetter = obj => Object.keys(obj || {}).sort((a, b) => L(a).localeCompare(L(b)));
+    let correct, wrong;
+    if (Array.isArray(ex.correct)) {
+      correct = ex.correct.map((t, i) => h("div", { class: "ex-item" }, h("span", { class: "ex-k" }, (i + 1) + "."), h("span", {}, t)));
+      wrong = (ex.incorrect || []).map(t => h("div", { class: "ex-item" }, h("span", { class: "ex-k" }, "•"), h("span", {}, t)));
+    } else {
+      correct = byLetter(ex.correct).map(k => h("div", { class: "ex-item" }, h("span", { class: "ex-k" }, L(k) + ":"), h("span", {}, ex.correct[k])));
+      wrong = byLetter(ex.incorrect).map(k => h("div", { class: "ex-item" }, h("span", { class: "ex-k" }, L(k) + ":"), h("span", {}, h("b", {}, optText(k).replace(/[.:;]\s*$/, "") + ": "), ex.incorrect[k])));
+    }
+    return h("details", { class: "explain", open: true },
+      h("summary", {}, "Explanation"),
+      h("div", { class: "ex-h" }, "Correct Answer"), correct,
+      wrong.length ? h("div", { class: "ex-h" }, "Incorrect Answers") : null, wrong,
+      ex.note ? h("div", { class: "ex-note" }, ex.note) : null,
+      h("div", { class: "ex-ai" }, "AI-written explanation: verify against Microsoft Learn before relying on it."));
   }
   function go(d) { S.idx = Math.max(0, Math.min(S.order.length - 1, S.idx + d)); quiz(); window.scrollTo(0, 0); }
 

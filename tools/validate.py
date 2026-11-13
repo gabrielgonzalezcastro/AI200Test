@@ -24,5 +24,15 @@ for q in qs:
         else:
             for s in t["segments"]:
                 if isinstance(s, dict) and s["answer"] not in s["options"]: err.append(f"{i}: segment answer")
+noex = [q["id"] for q in qs if not q.get("explanation")]
+for q in qs:
+    e = q.get("explanation")
+    if not e: continue
+    if q["kind"] in ("single", "multi"):
+        if not isinstance(e["correct"], dict) or set(e["correct"]) != set(q["answer"]): err.append(f"{q['id']}: explanation correct keys != answer")
+        wrong = {o["key"] for o in q["options"]} - set(q["answer"])
+        if set(e.get("incorrect", {})) != wrong: err.append(f"{q['id']}: explanation incorrect keys != wrong options {sorted(wrong)}")
+    elif not isinstance(e["correct"], list): err.append(f"{q['id']}: non-MCQ explanation.correct must be a list")
+print("missing explanations:", len(noex), noex[:10])
 print("errors:", err); print("pending answers (no source answer):", len(pending), pending[:3], "...", pending[-1:] )
 sys.exit(1 if err else 0)

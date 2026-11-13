@@ -44,7 +44,7 @@ const Renderers = (() => {
     }
     paint();
     return {
-      el, get: () => sel,
+      el, get: () => sel, letterOf: Object.fromEntries(opts.map((op, i) => [op.key, String.fromCharCode(65 + i)])),
       grade() {
         if (!q.answer || !q.options.length) return { correct: null };
         const ok = same([...sel].sort(), [...q.answer].sort());

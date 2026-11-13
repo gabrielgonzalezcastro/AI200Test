@@ -112,3 +112,12 @@ img.exhibit { max-width: 100%; display: block; margin: 10px 0; border: 1px solid
 .login label { display: grid; gap: 4px; font-size: 14px; color: var(--muted); }
 .login input { font: inherit; padding: 10px; border-radius: 8px; border: 1px solid var(--line); background: var(--bg); color: var(--text); }
 .login-err { color: var(--bad); min-height: 1.2em; font-size: 14px; }
+
+/* explanation */
+.explain { margin-top: 14px; border: 1px solid var(--line); border-radius: 10px; padding: 12px 16px; background: var(--card); }
+.explain summary { font-size: 18px; font-weight: 700; cursor: pointer; color: var(--muted); }
+.ex-h { margin: 14px 0 6px; font-weight: 700; color: var(--muted); font-size: 15px; }
+.ex-item { display: flex; gap: 12px; margin: 6px 0; font-size: 15px; }
+.ex-k { flex: none; min-width: 1.6em; color: var(--muted); }
+.ex-note { margin-top: 12px; padding: 8px 12px; border-radius: 8px; background: var(--warn-bg); font-size: 14px; }
+.ex-ai { margin-top: 12px; font-size: 12px; color: var(--muted); }

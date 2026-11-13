@@ -4,6 +4,9 @@ import json, re, os, collections
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 raw = json.load(open(os.path.join(ROOT, "tools", "raw.json"), encoding="utf-8"))
 import glob
+EXPL = {}
+for _p in sorted(glob.glob(os.path.join(ROOT, "tools", "explanations_*.json"))):
+    EXPL.update(json.load(open(_p, encoding="utf-8")))
 OVERRIDES = json.load(open(os.path.join(ROOT, "tools", "answer_overrides.json"), encoding="utf-8"))
 trans = {}
 for tp in sorted(glob.glob(os.path.join(ROOT, "tools", "transcribed*.json"))):
@@ -104,6 +107,20 @@ for q in raw:
         m = re.match(r"([A-F])\. (.*)", p, re.S)
         if m:
             opts.append({"key": m.group(1), "text": " ".join(x.strip() for x in m.group(2).split("\n") if x.strip())})
+    # clean page-break artefacts in options: duplicated keys, and the next option's letter+text glued onto this one
+    seen_k, clean = set(), []
+    for o in opts:
+        if o["key"] not in seen_k:
+            seen_k.add(o["key"]); clean.append(o)
+    opts = clean
+    for o in opts:
+        for o2 in opts:
+            if o2["key"] == o["key"]:
+                continue
+            m = re.search(r"\s+" + o2["key"] + r"\s+" + re.escape(o2["text"][:10]), o["text"])
+            if m:
+                o["text"] = o["text"][:m.start()].strip()
+        o["text"] = re.sub(r"\.\s+[A-F]\s+[A-Z][\w\- ]*$", ".", o["text"]).strip()
     stem = [s for s in paragraphs(stem_raw.split("\n")) if not s.startswith("NOTE: Each correct selection")]
     # drop paragraphs duplicated across a PDF page break (identical to the next one, ignoring final period)
     stem = [s for i, s in enumerate(stem)
@@ -129,6 +146,8 @@ for q in raw:
             d["options"] = t["options"]; d["images"] = []
         else:
             d["interactive"] = t
+    if str(q["id"]) in EXPL:
+        d["explanation"] = EXPL[str(q["id"])]
     out.append(d)
 
 os.makedirs(os.path.join(ROOT, "site", "data"), exist_ok=True)
