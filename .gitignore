@@ -19,3 +19,8 @@ Thumbs.db
 # Unencrypted question data: keep local only. The site ships data/questions.enc.json instead.
 site/data/questions.json
 site/data/questions.local.js
+
+# Hand-written answer data and explanations: keep local only (shipped encrypted in site/data/questions.enc.json)
+tools/transcribed_*.json
+tools/answer_overrides.json
+tools/explanations_*.json

@@ -21,3 +21,6 @@ python tools/build.py      # regenerate the unencrypted data
 python tools/encrypt.py    # prompts for username/password -> site/data/questions.enc.json
 ```
 Commit `questions.enc.json` and push. Username is case-insensitive. The images in `site/img/` are not encrypted.
+
+
+Note: `tools/transcribed_*.json`, `tools/answer_overrides.json` and `tools/explanations_*.json` hold the hand-written answers and explanations. They are gitignored (not in the repo), so keep your own backup copy of them.
